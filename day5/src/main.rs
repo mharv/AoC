@@ -13,6 +13,20 @@ struct Line {
     end_point: Point,
 }
 
+#[derive(Debug)]
+struct Grid {
+    matrix: Vec<Vec<u8>>,
+}
+
+impl Grid {
+    fn new() -> Self {
+        let matrix = vec![vec![0; GRID_SIZE]; GRID_SIZE];
+        Grid { matrix }
+    }
+}
+
+const GRID_SIZE: usize = 1000;
+
 fn main() {
     let path = String::from("./input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
@@ -41,4 +55,7 @@ fn main() {
     for line in lines.iter() {
         println!("{:?}", line);
     }
+
+    let grid = Grid::new();
+    println!("{:?}", grid);
 }
