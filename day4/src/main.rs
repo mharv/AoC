@@ -38,7 +38,8 @@ impl Board {
         }
     }
 
-    fn check_for_win_condition(&self) -> (bool, i32) {
+    fn check_for_win_condition(&mut self) -> (bool, i32) {
+
         // check columns
         for col_index in 0..self.marks[0].len() {
             let mut count = 0;
@@ -51,13 +52,10 @@ impl Board {
                 return (true, self.number);
             }
         }
-
         // check rows
         for row in self.marks.iter() {
             if !row.contains(&0) {
                 return (true, self.number);
-            } else {
-                return (false, self.number);
             }
         }
         return (false, self.number);
@@ -75,6 +73,8 @@ impl Board {
         total
     }
 }
+
+
 
 fn main() {
     let path = String::from("./input.txt");
@@ -97,22 +97,50 @@ fn main() {
         }
     }
 
-    println!("number of boards: {:?}", boards.len());
-
+    // find first winner and calculate score
     'outer: for drawn_val in drawn_cards.iter() {
         for board in boards.iter_mut() {
             board.check_for_number_and_mark(drawn_val);
             let winner = board.check_for_win_condition();
             if winner.0 {
-                println!("{:?}", board.number);
-                println!("{:?}", board.marks);
-                println!("{:?}", board.rows);
                 println!("winning board is: {}", winner.1);
                 let score = board.calculate_unmarked_total() * drawn_val;
                 println!("winning score for board {} is {} with current drawn value of {}",winner.1, score, drawn_val);
                 break 'outer
             }
         }
+    }
 
+    // find last winner and calculate score
+
+    let mut won_boards: Vec<i32> = Vec::new();
+    let boards_length = boards.len();
+
+    'outer: for drawn_val in drawn_cards.iter() {
+        for board in boards.iter_mut() {
+            if board.number == 27 {
+                // println!("{:?}", board.marks);
+            }
+            if !won_boards.contains(&board.number) {
+                board.check_for_number_and_mark(drawn_val);
+                let winner = board.check_for_win_condition();
+                if winner.0 {
+                    won_boards.push(board.number);
+
+                    if won_boards.len() == boards_length {
+
+                        println!("number of won boards: {}", won_boards.len());
+                        // won_boards.sort();
+                        println!("{:?}", won_boards);
+                        println!("last winning board is: {}", board.number);
+                        let score = board.calculate_unmarked_total() * drawn_val;
+                        println!("winning score for last board {} is {} with current drawn value of {}", board.number, score, drawn_val);
+                        println!("{:?}", board.rows);
+                        println!("{:?}", board.marks);
+                        break 'outer
+                    }
+                }
+            }
+        }
     }
 }
