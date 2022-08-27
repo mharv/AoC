@@ -118,9 +118,6 @@ fn main() {
 
     'outer: for drawn_val in drawn_cards.iter() {
         for board in boards.iter_mut() {
-            if board.number == 27 {
-                // println!("{:?}", board.marks);
-            }
             if !won_boards.contains(&board.number) {
                 board.check_for_number_and_mark(drawn_val);
                 let winner = board.check_for_win_condition();
