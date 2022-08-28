@@ -19,8 +19,8 @@ struct Grid {
 }
 
 impl Grid {
-    fn new() -> Self {
-        let matrix = vec![vec![0; GRID_SIZE]; GRID_SIZE];
+    fn new(grid_size: usize) -> Self {
+        let matrix = vec![vec![0; grid_size]; grid_size];
         Grid { matrix }
     }
 
@@ -32,6 +32,23 @@ impl Grid {
                     if y >= line.start_point.y && y <= line.end_point.y && x >= line.start_point.x && x <= line.end_point.x {
                         self.matrix[y][x] += 1;
                     }
+                }
+            }
+        } else {
+            // line must be diagonal
+            if line.start_point.x < line.end_point.x && line.start_point.y < line.end_point.y {
+                for (i, x) in ((line.start_point.x)..=line.end_point.x).enumerate() {
+                    self.matrix[line.start_point.y + i][x] += 1;
+                }
+            }
+            if line.start_point.x > line.end_point.x && line.start_point.y < line.end_point.y {
+                for (i, x) in ((line.end_point.x)..=line.start_point.x).rev().enumerate() {
+                    self.matrix[line.start_point.y + i][x] += 1;
+                }
+            }
+            if line.start_point.x < line.end_point.x && line.start_point.y > line.end_point.y {
+                for (i, x) in ((line.start_point.x)..=line.end_point.x).enumerate() {
+                    self.matrix[line.start_point.y - i][x] += 1;
                 }
             }
         }
@@ -48,12 +65,31 @@ impl Grid {
         }
         count
     }
+
+    fn print_grid(&self) {
+        for row in self.matrix.iter() {
+            for item in row {
+                if item == &0 {
+                    print!(".");
+                } else {
+                    print!("{}", item);
+                }
+            }
+            print!("\n");
+        }
+    }
 }
 
 const GRID_SIZE: usize = 1000;
+const TEST_GRID_SIZE: usize = 10;
 
 fn main() {
     let path = String::from("./input.txt");
+    let mut grid = Grid::new(GRID_SIZE);
+
+    // let path = String::from("./test_input.txt");
+    // let mut grid = Grid::new(TEST_GRID_SIZE);
+
     let content = fs::read_to_string(path).expect("file was not read");
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
@@ -86,10 +122,13 @@ fn main() {
         lines.push(temp_line);
     }
 
-    let mut grid = Grid::new();
+
+
     for line in lines.iter() {
         grid.mark_line(&line);
     }
     let result = grid.check_for_overlaps();
     println!("there are {} overlaps", result);
+
+    // grid.print_grid();
 }
