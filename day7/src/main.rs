@@ -2,7 +2,7 @@ use std::fs;
 
 fn main() {
     let path = String::from("./input.txt");
-    // let path = String::from("./test_input.txt");
+    //let path = String::from("./test_input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
@@ -17,6 +17,7 @@ fn main() {
     let mut lowest_cost_position: i32 = 0;
     let mut lowest_cost_position_cost: i32 = 0;
     let mut last_position_cost: i32 = 0;
+
     for position in 0..=*max_horizontal_position {
         let current_position_cost = get_cost_of_position(&horizontal_positions, position);
         if position == 0 {
@@ -39,7 +40,11 @@ fn get_cost_of_position(positions: &Vec<i32>, n: i32) -> i32 {
     let mut total_cost = 0;
 
     for position in positions.iter() {
-        total_cost += (position - n ).abs();
+        let mut j = 1;
+        for _ in 0..(position - n ).abs() {
+            total_cost += j;
+            j += 1;
+        }
     }
     total_cost
 }
