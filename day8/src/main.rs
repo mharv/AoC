@@ -2,8 +2,8 @@ use std::{fs, collections::HashMap};
 
 fn main() {
 
-    // let path = String::from("./input.txt");
-    let path = String::from("./test_input.txt");
+    let path = String::from("./input.txt");
+    // let path = String::from("./test_input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
@@ -31,16 +31,16 @@ fn main() {
             for value in values[0].split_whitespace().collect::<Vec<&str>>().iter() {
                 // figure out each number
                 if value.len() == 2 {
-                    look_up.insert(1, value.to_string());
+                    look_up.insert(1, sort_string_alphabetically(value.to_string()));
                 }
                 if value.len() == 4 {
-                    look_up.insert(4, value.to_string());
+                    look_up.insert(4, sort_string_alphabetically(value.to_string()));
                 }
                 if value.len() == 3 {
-                    look_up.insert(7, value.to_string());
+                    look_up.insert(7, sort_string_alphabetically(value.to_string()));
                 }
                 if value.len() == 7 {
-                    look_up.insert(8, value.to_string());
+                    look_up.insert(8, sort_string_alphabetically(value.to_string()));
                 }
                 if value.len() == 6 && look_up.contains_key(&4) && look_up.contains_key(&1){
                     // if length == 6 (0, 6, 9) and item contains 1 and 4, it is 9
@@ -74,9 +74,9 @@ fn main() {
                         four_contained = 0;
                     }
 
-                    if one_contained == 1 && four_contained == 0 { look_up.insert(0, value.to_string()); }
-                    if one_contained == 0 && four_contained == 0 { look_up.insert(6, value.to_string()); }
-                    if one_contained == 1 && four_contained == 1 { look_up.insert(9, value.to_string()); }
+                    if one_contained == 1 && four_contained == 0 { look_up.insert(0, sort_string_alphabetically(value.to_string())); }
+                    if one_contained == 0 && four_contained == 0 { look_up.insert(6, sort_string_alphabetically(value.to_string())); }
+                    if one_contained == 1 && four_contained == 1 { look_up.insert(9, sort_string_alphabetically(value.to_string())); }
                 }
                 if value.len() == 5 && look_up.contains_key(&1) && look_up.contains_key(&6){
                     // if length == 5 (2, 3, 5) and contains all but 2 of 9's segments, it is 2
@@ -103,47 +103,37 @@ fn main() {
                         }
                     }
 
-                    if one_contained == 1 { look_up.insert(3, value.to_string()); }
-                    if one_contained == 0 && six_count == (look_up[&6].len()-2) { look_up.insert(2, value.to_string()); }
-                    if one_contained == 0 && six_count == (look_up[&6].len()-1) { look_up.insert(5, value.to_string()); }
+                    if one_contained == 1 { look_up.insert(3, sort_string_alphabetically(value.to_string())); }
+                    if one_contained == 0 && six_count == (look_up[&6].len()-2) { look_up.insert(2, sort_string_alphabetically(value.to_string())); }
+                    if one_contained == 0 && six_count == (look_up[&6].len()-1) { look_up.insert(5, sort_string_alphabetically(value.to_string())); }
                 }
             }
         }
 
         let mut look_up_reverse: HashMap<String, i32> = HashMap::new();
         for (k, v) in look_up.iter() {
-            println!("{} : {}", k, v);
             look_up_reverse.insert(v.clone(), k.clone());
         }
 
         let mut local_total = 0;
         for (i, value) in values[1].split_whitespace().collect::<Vec<&str>>().iter().enumerate() {
-            let mut new_key = String::from("");
-            // check if same segment
-            for (k, _v) in look_up_reverse.iter() {
-                let mut count = 0;
-                for character in value.chars() {
-                    if k.contains(character) {
-                        count += 1;
-                    }
-                }
-                if count == k.to_string().len() {
-                    new_key = k.clone();
-                }
-            }
             // map each value to above
             match i {
-                0 => local_total += 1000 * look_up_reverse[&new_key],
-                1 => local_total += 100 * look_up_reverse[&new_key],
-                2 => local_total += 10 * look_up_reverse[&new_key],
-                3 => local_total += look_up_reverse[&new_key],
+                0 => local_total += 1000 * look_up_reverse[&sort_string_alphabetically(value.to_string())],
+                1 => local_total += 100 * look_up_reverse[&sort_string_alphabetically(value.to_string())],
+                2 => local_total += 10 * look_up_reverse[&sort_string_alphabetically(value.to_string())],
+                3 => local_total += look_up_reverse[&sort_string_alphabetically(value.to_string())],
                 _ => panic!("nup"),
             }
         }
-        println!("local total for {:?} is: {}", &values[1], local_total);
-        println!("{:?}", look_up_reverse);
         grand_total += local_total;
     }
 
     println!("grand total is: {}", grand_total);
+}
+
+fn sort_string_alphabetically(input: String) -> String {
+    let mut temp_char_vec = input.chars().collect::<Vec<char>>();
+    temp_char_vec.sort();
+    temp_char_vec.into_iter().collect()
 }
