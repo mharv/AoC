@@ -4,6 +4,14 @@ use std::fs;
 #[derive(Debug)]
 struct Grid {
     matrix: Vec<Vec<u8>>,
+    low_points: Vec<Point>,
+    basins: Vec<i32>,
+}
+
+#[derive(Debug)]
+struct Point {
+    x: usize,
+    y: usize,
 }
 
 impl Grid {
@@ -18,7 +26,7 @@ impl Grid {
             }
         }
 
-        Grid { matrix }
+        Grid { matrix, low_points: Vec::new(), basins: Vec::new() }
     }
 
     fn print_grid(&self) {
@@ -34,7 +42,7 @@ impl Grid {
         println!("x: {}, y: {}", self.matrix[0].len(), self.matrix.len());
     }
 
-    fn find_low_points(&self) -> i32 {
+    fn find_low_points(&mut self) -> i32 {
         let mut total_low_points: i32 = 0;
 
         for (y, row) in self.matrix.iter().enumerate() {
@@ -67,26 +75,58 @@ impl Grid {
 
                 if temp_items.len() == count {
                     total_low_points += *item as i32 + 1;
+                    self.low_points.push(Point { x, y })
                 }
             }
         }
 
         total_low_points
     }
+
+    fn find_basins(&mut self) {
+        for point in self.low_points.iter() {
+            let mut count = 0;
+            flood_fill(&self.matrix, point, &mut count);
+            self.basins.push(count);
+        }
+        println!("{:?}", self.basins);
+    }
+}
+
+fn flood_fill(matrix: &Vec<Vec<u8>>, point: &Point, count: &mut i32) {
+    if matrix[point.y][point.x] != 9 {
+        *count += 1;
+
+        if point.x > 0 {
+            flood_fill(matrix, &Point { x: point.x-1, y: point.y }, count);
+        }
+        // check right
+        if point.x < matrix[0].len()-1 {
+            flood_fill(matrix, &Point { x: point.x+1, y: point.y }, count);
+        }
+        // check up
+        if point.y > 0 {
+            flood_fill(matrix, &Point { x: point.x, y: point.y-1 }, count);
+        }
+        // check down
+        if point.y < matrix.len()-1 {
+            flood_fill(matrix, &Point { x: point.x, y: point.y+1 }, count);
+        }
+    }
 }
 
 fn main() {
 
-    // let path = String::from("./test_input.txt");
-    let path = String::from("./input.txt");
+    let path = String::from("./test_input.txt");
+    // let path = String::from("./input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
 
-    let grid = Grid::new(content);
+    let mut grid = Grid::new(content);
 
-    // grid.print_grid();
     grid.print_grid_dimensions();
 
     let result = grid.find_low_points();
     println!("low points added together = {}", result);
+    grid.find_basins();
 
 }
