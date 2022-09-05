@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, collections::VecDeque};
 
 
 #[derive(Debug)]
@@ -8,7 +8,7 @@ struct Grid {
     basins: Vec<i32>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Point {
     x: usize,
     y: usize,
@@ -84,15 +84,61 @@ impl Grid {
     }
 
     fn find_basins(&mut self) {
-        for point in self.low_points.iter() {
-            let mut count = 0;
-            flood_fill(&self.matrix, point, &mut count);
+        for low_point in self.low_points.iter() {
+            // cant use recursive function like this
+            // flood_fill(&self.matrix, point, &mut count);
+            //
+            let mut queue: VecDeque<Point> = VecDeque::new();
+            queue.push_back(low_point.clone());
+            self.matrix[low_point.y][low_point.x] = 9;
+            let mut count = 1;
+
+            while queue.len() > 0 {
+                let point = queue.pop_front().unwrap();
+
+                // check left
+                if point.x > 0 {
+                    if self.matrix[point.y][point.x - 1] != 9 {
+                        queue.push_back(Point { x: point.x - 1, y: point.y });
+                        self.matrix[point.y][point.x - 1] = 9;
+                        count += 1;
+                    }
+                }
+                // check right
+                if point.x < self.matrix[0].len()-1 {
+                    if self.matrix[point.y][point.x + 1] != 9 {
+                        queue.push_back(Point { x: point.x + 1, y: point.y });
+                        self.matrix[point.y][point.x + 1] = 9;
+                        count += 1;
+                    }
+                }
+                // check up
+                if point.y > 0 {
+                    if self.matrix[point.y - 1][point.x] != 9 {
+                        queue.push_back(Point { x: point.x, y: point.y - 1 });
+                        self.matrix[point.y - 1][point.x] = 9;
+                        count += 1;
+                    }
+                }
+                // check down
+                if point.y < self.matrix.len()-1 {
+                    if self.matrix[point.y + 1][point.x] != 9 {
+                        queue.push_back(Point { x: point.x, y: point.y + 1 });
+                        self.matrix[point.y + 1][point.x] = 9;
+                        count += 1;
+                    }
+                }
+            }
+
             self.basins.push(count);
         }
-        println!("{:?}", self.basins);
+        self.basins.sort();
+        self.basins.reverse();
+        println!("3 largest basins multiplied: {}", self.basins[0] * self.basins[1] * self.basins[2]);
     }
 }
 
+// cant use recursive function like this
 fn flood_fill(matrix: &Vec<Vec<u8>>, point: &Point, count: &mut i32) {
     if matrix[point.y][point.x] != 9 {
         *count += 1;
@@ -117,8 +163,8 @@ fn flood_fill(matrix: &Vec<Vec<u8>>, point: &Point, count: &mut i32) {
 
 fn main() {
 
-    let path = String::from("./test_input.txt");
-    // let path = String::from("./input.txt");
+    // let path = String::from("./test_input.txt");
+    let path = String::from("./input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
 
     let mut grid = Grid::new(content);
