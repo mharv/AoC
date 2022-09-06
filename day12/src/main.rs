@@ -20,12 +20,10 @@ fn main() {
         let temp_caves: Vec<&str> = row.split("-").collect();
 
         if caves.contains_key(temp_caves[0]) {
-            println!("{} already exists.", temp_caves[0]);
             if !caves.get(temp_caves[0]).unwrap().connections.contains(&temp_caves[1].to_string()) {
                 caves.get_mut(temp_caves[0]).unwrap().connections.push(temp_caves[1].to_string());
             }
         } else {
-            println!("{} is not in the list of caves.", temp_caves[0]);
             let mut is_big = false;
 
             if temp_caves[0].to_uppercase() == temp_caves[0] {
@@ -38,12 +36,10 @@ fn main() {
         }
 
         if caves.contains_key(temp_caves[1]) {
-            println!("{} already exists.", temp_caves[1]);
             if !caves.get(temp_caves[1]).unwrap().connections.contains(&temp_caves[0].to_string()) {
                 caves.get_mut(temp_caves[1]).unwrap().connections.push(temp_caves[0].to_string());
             }
         } else {
-            println!("{} is not in the list of caves.", temp_caves[1]);
             let mut is_big = false;
 
             if temp_caves[1].to_uppercase() == temp_caves[1] {
@@ -56,8 +52,8 @@ fn main() {
         }
     }
 
-    for (k, v) in caves.iter() {
-        println!("Cave name: {}", v.name);
+    for (_k, v) in caves.iter() {
+        print!("Cave name: {}\t", v.name);
         println!("Cave is big: {}", v.is_big);
         println!("Cave connections:");
         for connection in v.connections.iter() {
