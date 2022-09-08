@@ -22,6 +22,10 @@ fn main() {
                 x_size *= 2;
             }
         }
+
+        if x_size != 0 && y_size != 0 {
+            break;
+        }
     }
 
     let matrix = vec![vec!["."; x_size]; y_size];
