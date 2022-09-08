@@ -33,4 +33,6 @@ fn main() {
         print!("\n");
     }
 
+    println!("matrix x size is {}", x_size);
+    println!("matrix y size is {}", y_size);
 }
