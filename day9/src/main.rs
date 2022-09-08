@@ -174,5 +174,6 @@ fn main() {
     let result = grid.find_low_points();
     println!("low points added together = {}", result);
     grid.find_basins();
+    grid.print_grid();
 
 }
