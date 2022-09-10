@@ -3,11 +3,18 @@ use std::fs;
 
 struct Paper {
     matrix: Vec<Vec<String>>,
+    folds: Vec<Fold>
+}
+
+struct Fold {
+    axis: String,
+    index: i32,
 }
 
 impl Paper {
-    fn new(input: Vec<&str>) -> Self {
+    fn new(input: &Vec<&str>) -> Self {
 
+        let mut folds = Vec::new();
         let mut x_size = 0;
         let mut y_size = 0;
 
@@ -37,7 +44,7 @@ impl Paper {
         }
 
         let matrix = vec![vec![".".to_string(); x_size]; y_size];
-        Paper { matrix }
+        Paper { matrix, folds }
     }
 
     fn display_paper(&self) {
@@ -54,33 +61,95 @@ impl Paper {
         println!("matrix y size is {}", self.matrix.len());
     }
 
-    fn mark_coordinates(&mut self, input: Vec<&str>) {
+    fn mark_coordinates(&mut self, input: &Vec<&str>) {
 
         for line in input.iter() {
-            if !line.is_empty() && line.contains("fold along") {
-                if line.contains("y") {
+            if !line.is_empty() && line.contains(",") {
+                let x = line.split(",").collect::<Vec<&str>>()[0];
+                let x: usize = x.parse().unwrap();
+                let y = line.split(",").collect::<Vec<&str>>()[1];
+                let y: usize = y.parse().unwrap();
 
-                }
-                if line.contains("x") {
+                self.matrix[y][x] = "#".to_string();
+            }
+        }
+    }
 
+    fn count_hashes(&self) -> i32 {
+        let mut count = 0;
+        for y in 0..self.matrix.len() {
+            for x in 0..self.matrix[y].len() {
+                if self.matrix[y][x] == "#" {
+                    count += 1;
                 }
             }
+        }
+        count
+    }
+
+    fn fold_along_axis(&mut self, axis: String) {
+
+        let mut list_of_marks: Vec<(usize, usize)> = Vec::new();
+        let mut count_to_drop = 0;
+
+        if axis == "y" {
+            // gather marks
+            'outer: for (y, row) in self.matrix.iter().enumerate() {
+                count_to_drop += 1;
+                for (x, _) in row.iter().enumerate() {
+                    if y == self.matrix.len()-1-y {
+                        break 'outer;
+                    }
+                    if self.matrix[self.matrix.len()-1-y][x] == "#" {
+                        list_of_marks.push((x, y))
+                    }
+                }
+            }
+            // remove old rows
+            for _ in 0..count_to_drop {
+                self.matrix.pop();
+            }
+
+        } else {
+            // gather marks
+            for (y, row) in self.matrix.iter().enumerate() {
+                count_to_drop = 0;
+                for (x, _) in row.iter().enumerate() {
+                    count_to_drop += 1;
+                    if x == row.len()-1-x {
+                        break;
+                    }
+                    if row[row.len()-1-x] == "#" {
+                        list_of_marks.push((x, y))
+                    }
+                }
+            }
+            // remove old items
+            for row_index in 0..self.matrix.len() {
+                for _ in 0..count_to_drop {
+                    self.matrix[row_index].pop();
+                }
+            }
+        }
+
+        for mark in list_of_marks {
+            self.matrix[mark.1][mark.0] = "#".to_string();
         }
     }
 }
 
 fn main() {
-    let path = String::from("./test_input.txt");
-    // let path = String::from("./input.txt");
+    // let path = String::from("./test_input.txt");
+    let path = String::from("./input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
-    let paper = Paper::new(content_split);
+    let mut paper = Paper::new(&content_split);
 
-    paper.display_size();
-    paper.display_paper();
+    paper.mark_coordinates(&content_split);
+    paper.fold_along_axis("x".to_string());
 
-
+    println!("number of hashes: {}", paper.count_hashes());
 
 
     // mark the y fold.
