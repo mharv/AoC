@@ -1,8 +1,8 @@
 use std::{fs, collections::HashMap};
 
 fn main() {
-    // let path = String::from("./test_input.txt");
-    let path = String::from("./input.txt");
+    let path = String::from("./test_input.txt");
+    // let path = String::from("./input.txt");
     let content = fs::read_to_string(path).expect("file was not read");
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
@@ -20,7 +20,7 @@ fn main() {
         }
     }
 
-    for _ in 0..10 {
+    for _ in 0..40 {
         sequence = do_step(&mut sequence, &lookup);
     }
 
