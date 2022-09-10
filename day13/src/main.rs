@@ -18,32 +18,30 @@ impl Paper {
         let mut x_size = 0;
         let mut y_size = 0;
 
-        let mut y_fold = 0;
-        let mut x_fold = 0;
+        let mut x = 0;
+        let mut y = 0;
 
         for line in input.iter() {
             if !line.is_empty() && line.contains("fold along") {
                 if line.contains("y") {
                     y_size = line.split("=").collect::<Vec<&str>>()[1].parse().expect("not a number");
-                    y_fold = y_size;
+                    folds.push(Fold { axis: "y".to_string(), index: y_size });
                     y_size *= 2;
                     y_size += 1;
+                    if y == 0 { y = y_size }
 
                 }
                 if line.contains("x") {
                     x_size = line.split("=").collect::<Vec<&str>>()[1].parse().expect("not a number");
-                    x_fold = x_size;
+                    folds.push(Fold { axis: "x".to_string(), index: x_size });
                     x_size *= 2;
                     x_size += 1;
+                    if x == 0 { x = x_size }
                 }
-            }
-
-            if x_size != 0 && y_size != 0 {
-                break;
             }
         }
 
-        let matrix = vec![vec![".".to_string(); x_size]; y_size];
+        let matrix = vec![vec![".".to_string(); x as usize]; y as usize];
         Paper { matrix, folds }
     }
 
@@ -145,12 +143,13 @@ fn main() {
     let content_split: Vec<&str> = content.trim().split("\n").collect();
 
     let mut paper = Paper::new(&content_split);
-
     paper.mark_coordinates(&content_split);
-    paper.fold_along_axis("x".to_string());
+
+    for i in 0..paper.folds.len() {
+        paper.fold_along_axis(paper.folds[i].axis.to_string());
+    }
+
+    paper.display_paper();
 
     println!("number of hashes: {}", paper.count_hashes());
-
-
-    // mark the y fold.
 }
