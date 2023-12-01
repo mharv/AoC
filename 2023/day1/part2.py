@@ -23,35 +23,49 @@ lookup = {
 
 
 def read_input():
-    return example
+    # return example
     with open("./input.txt") as file:
         return file.read()
 
 
-def replace_words(line):
-    new_list = ""
-    alpha_chars_list = ""
+def check_start(line):
+    queue = ""
     for char in list(line):
         if char.isnumeric():
-            if len(alpha_chars_list) >= 3:
-                print(alpha_chars_list)
-                # for i, v in enumerate(list(alpha_chars_list)):
-                for key in lookup:
-                    if key in alpha_chars_list:
-                        new_list += lookup[key]
-                        alpha_chars_list = ""
-            new_list += char
-        if char.isalpha():
-            alpha_chars_list += char
+            return ""
+        queue += char
 
-    return new_list
+        new_start = ""
+        if len(queue) >= 3:
+            for key in lookup:
+                if key in queue:
+                    new_start += lookup[key]
+                    return new_start
+
+
+def check_end(line):
+    queue = ""
+    for char in reversed(list(line)):
+        if char.isnumeric():
+            return ""
+        queue = char + queue
+
+        new_end = ""
+        if len(queue) >= 3:
+            for key in lookup:
+                if key in queue:
+                    new_end += lookup[key]
+                    return new_end
 
 
 def main():
     total = 0
     for line in read_input().splitlines():
-        stripped_line = replace_words(line)
-        # total += int(stripped_line[0] + stripped_line[-1])
+        stripped_line = check_start(line) + line
+        stripped_line = stripped_line + check_end(stripped_line)
+
+        stripped_line = list(filter(lambda x: x.isnumeric(), list(stripped_line)))
+        total += int(stripped_line[0] + stripped_line[-1])
     print(total)
 
 
