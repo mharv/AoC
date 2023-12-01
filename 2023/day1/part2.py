@@ -23,7 +23,7 @@ lookup = {
 
 
 def read_input():
-    # return example
+    return example
     with open("./input.txt") as file:
         return file.read()
 
@@ -33,15 +33,16 @@ def replace_words(line):
     alpha_chars_list = ""
     for char in list(line):
         if char.isnumeric():
+            if len(alpha_chars_list) >= 3:
+                print(alpha_chars_list)
+                # for i, v in enumerate(list(alpha_chars_list)):
+                for key in lookup:
+                    if key in alpha_chars_list:
+                        new_list += lookup[key]
+                        alpha_chars_list = ""
             new_list += char
-            alpha_chars_list = ""
         if char.isalpha():
             alpha_chars_list += char
-        if len(alpha_chars_list) >= 3:
-            for key in lookup:
-                if key in alpha_chars_list:
-                    new_list += lookup[key]
-                    alpha_chars_list = ""
 
     return new_list
 
@@ -50,7 +51,7 @@ def main():
     total = 0
     for line in read_input().splitlines():
         stripped_line = replace_words(line)
-        total += int(stripped_line[0] + stripped_line[-1])
+        # total += int(stripped_line[0] + stripped_line[-1])
     print(total)
 
 
