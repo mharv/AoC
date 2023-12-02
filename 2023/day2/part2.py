@@ -16,7 +16,7 @@ limit_lookup = {
 
 
 def prepare_string(line):
-    # prepare string returns a game number and a dict with color : number
+    # prepare string returns a game number and a list of dicts with color : number
     result = {"game_number": 0, "result_maps": []}
 
     line = line.split(":")
