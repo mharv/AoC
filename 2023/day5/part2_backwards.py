@@ -1,6 +1,8 @@
 # Description: Advent of Code: Day 5, 2023
 # Created by: Mitchell Harvey
 
+import time
+
 example = """seeds: 79 14 55 13
 
 seed-to-soil map:
@@ -89,6 +91,7 @@ def read_input():
 
 
 def main():
+    start_time = time.time()
     seed_ranges, maps = create_maps_seeds(read_input())
     # print(seeds)
     targets = []
@@ -108,6 +111,9 @@ def main():
                 found = True
                 break
         destination += 1
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"Total runtime: {elapsed_time} seconds")
 
 
 if __name__ == "__main__":
