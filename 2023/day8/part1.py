@@ -41,6 +41,7 @@ def apply_instructions(instructions, mapp, current_position):
             int(instructions[count % len(instructions)])
         ]
         if new_position != "ZZZ":
+            print(count + 1)
             current_position = new_position
             count += 1
         else:
@@ -56,10 +57,12 @@ def read_input():
 
 def main():
     instructions, mapp = process_input(read_input())
-    start_position = list(mapp.keys())[0]
+    start_position = "AAA"
     # print(mapp)
+    # apply_instructions(instructions, mapp, 0, start_position)
     apply_instructions(instructions, mapp, start_position)
 
 
 if __name__ == "__main__":
     main()
+
