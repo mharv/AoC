@@ -48,6 +48,34 @@ def expand(input):
     return input
 
 
+def get_coordinates(input):
+    coordinates = []
+    for i, line in enumerate(input.splitlines()):
+        for j, char in enumerate(line):
+            if char == "#":
+                coordinates.append((i, j))
+    return coordinates
+
+
+def find_all_unique_pairs(coordinates):
+    pairs = []
+    for i in range(len(coordinates)):
+        for j in range(i + 1, len(coordinates)):
+            pairs.append((coordinates[i], coordinates[j]))
+    return pairs
+
+
+def get_distance_between_pair(pair):
+    return abs(pair[0][0] - pair[1][0]) + abs(pair[0][1] - pair[1][1])
+
+
+def get_distances_between_pairs(pairs):
+    distances = []
+    for pair in pairs:
+        distances.append(get_distance_between_pair(pair))
+    return distances
+
+
 def read_input():
     return example
     with open("./input.txt") as file:
@@ -59,6 +87,13 @@ def main():
     input = expand(input)
     for line in input.splitlines():
         print(line)
+    coordinates = get_coordinates(input)
+    print(len(coordinates))
+    pairs = find_all_unique_pairs(coordinates)
+    print(pairs)
+    print(len(pairs))
+    print(get_distances_between_pairs(pairs))
+    print(sum(get_distances_between_pairs(pairs)))
 
 
 if __name__ == "__main__":
