@@ -1,7 +1,12 @@
 # Description: Advent of Code: Day 12, 2023
 # Created by: Mitchell Harvey
 
-example = """"""
+example = """???.### 1,1,3
+.??..??...?##. 1,1,3
+?#?#?#?#?#?#?#? 1,3,1,6
+????.#...#... 4,1,1
+????.######..#####. 1,6,5
+?###???????? 3,2,1"""
 
 
 def process_input(input):
@@ -13,14 +18,13 @@ def apply_instructions(instructions):
 
 
 def read_input():
-    # return example
+    return example
     with open("./input.txt") as file:
         return file.read()
 
 
 def main():
-    # apply_instructions(instructions, mapp, 0, start_position)
-    print("notuso")
+    print(read_input())
 
 
 if __name__ == "__main__":
