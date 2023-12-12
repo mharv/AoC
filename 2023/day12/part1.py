@@ -59,7 +59,8 @@ def find_combos(row, order, count=0):
                         count += find_combos(row[i + 1 + order[0] :], order[1:], count)
 
                     else:
-                        count += 1
+                        if "#" not in row[i + order[0] :]:
+                            count += 1
 
             else:
                 # check if first_item_window can fit here, and that no neighbours are "#"
@@ -74,14 +75,15 @@ def find_combos(row, order, count=0):
                         count += find_combos(row[i + 1 + order[0] :], order[1:], count)
 
                     else:
-                        count += 1
+                        if "#" not in row[i + order[0] :]:
+                            count += 1
 
     print(f"returning... count = {count}")
     return count
 
 
 def read_input():
-    return example
+    # return example
     with open("./input.txt") as file:
         return file.read()
 
@@ -92,7 +94,7 @@ def main():
     # print(test_case[1])
 
     results = []
-    for test in process_input(read_input())[0:1]:
+    for test in process_input(read_input()):
         results.append(find_combos(test[0], test[1]))
 
     print(results)
