@@ -23,7 +23,6 @@ def process_input(input):
             ]
         )
     for row in processed_input:
-        # pad row[0] with max(row[1]) "."s both ends
         row[0] = row[0][:-1] + ["."] * max(row[1])
     return processed_input
 
