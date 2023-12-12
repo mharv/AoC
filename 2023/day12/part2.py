@@ -1,6 +1,8 @@
 # Description: Advent of Code: Day 12, 2023
 # Created by: Mitchell Harvey
 
+import functools
+
 example = """.##.?#??.#.?# 2,1,1,1
 ???.### 1,1,3
 .??..??...?##. 1,1,3
@@ -25,60 +27,67 @@ def process_input(input):
     return processed_input
 
 
+@functools.lru_cache(maxsize=None)
 def find_combos(row, order, count=0):
     count = 0
-    # print(row)
-    # print(order)
+    print(f"Processing row: {row}, order: {order}, count: {count}")
 
     for i, item in enumerate(row):
         if item == ".":
+            print(f"Skipping item at index {i} because it's a '.'")
             continue
         if i + order[0] > len(row):
+            print(f"Breaking loop at index {i} because it's out of range")
             break
 
         if i > 0:
-            # check backwards to see if any other # exists
             if "#" in row[0:i]:
+                print(f"Skipping item at index {i} because a '#' was found before it")
                 continue
 
         if not "." in row[i : i + order[0]]:
-            # print(row)
-            # print(f"possible fit at {i}")
-            # print(row[i : i + order[0]])
-            # if item == "?" or item == "#":
             if i > 0:
-                # check if first_item_window can fit here, and that no neighbours are "#"
                 if row[i - 1] == "#" or row[i + order[0]] == "#":
-                    # print(f"{order[0]} could not fit at {i}")
-                    # print(item)
+                    print(
+                        f"Skipping item at index {i} because a '#' was found next to it"
+                    )
                     continue
                 else:
-                    # print(f"{order[0]} fits at {i}")
                     if len(order[1:]) > 0:
-                        # print("into recursion")
-                        count += find_combos(row[i + 1 + order[0] :], order[1:], count)
-
+                        print(f"Going into recursion at index {i}")
+                        count += find_combos(
+                            row[i + 1 + order[0] :], tuple(order[1:]), count
+                        )
                     else:
                         if "#" not in row[i + order[0] :]:
                             count += 1
-
+                        else:
+                            print(
+                                f"Skipping item at index {i} because a '#' was found after it"
+                            )
+                            continue
             else:
-                # check if first_item_window can fit here, and that no neighbours are "#"
                 if row[i + order[0]] == "#":
-                    # print(f"{order[0]} could not fit at {i}")
-                    # print(item)
+                    print(
+                        f"Skipping item at index {i} because a '#' was found next to it"
+                    )
                     continue
                 else:
-                    # print(f"{order[0]} fits at {i}")
                     if len(order[1:]) > 0:
-                        # print("into recursion")
-                        count += find_combos(row[i + 1 + order[0] :], order[1:], count)
-
+                        print(f"Going into recursion at index {i}")
+                        count += find_combos(
+                            row[i + 1 + order[0] :], tuple(order[1:]), count
+                        )
                     else:
                         if "#" not in row[i + order[0] :]:
                             count += 1
+                        else:
+                            print(
+                                f"Skipping item at index {i} because a '#' was found after it"
+                            )
+                            continue
 
-    # print(f"returning... count = {count}")
+    print(f"Returning count = {count}")
     return count
 
 
@@ -94,7 +103,9 @@ def main():
 
     results = []
     for test in process_input(read_input()):
-        results.append(find_combos(test[0], test[1]))
+        result = find_combos(tuple(test[0]), tuple(test[1]))
+        print(result)
+        results.append(result)
 
     print(results)
     print(sum(results))
