@@ -36,6 +36,11 @@ def find_combos(row, order, count=0):
         if i + order[0] > len(row):
             break
 
+        if i > 0:
+            # check backwards to see if any other # exists
+            if "#" in row[0:i]:
+                continue
+
         if not "." in row[i : i + order[0]]:
             print(row)
             print(f"possible fit at {i}")
@@ -87,7 +92,7 @@ def main():
     # print(test_case[1])
 
     results = []
-    for test in process_input(read_input()):
+    for test in process_input(read_input())[0:1]:
         results.append(find_combos(test[0], test[1]))
 
     print(results)
