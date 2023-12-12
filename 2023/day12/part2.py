@@ -2,6 +2,7 @@
 # Created by: Mitchell Harvey
 
 import functools
+import time
 
 example = """.##.?#??.#.?# 2,1,1,1
 ???.### 1,1,3
@@ -98,6 +99,7 @@ def read_input():
 
 
 def main():
+    start = time.time()
     test_case = process_input(read_input())
     print(test_case[1])
 
@@ -109,6 +111,9 @@ def main():
 
     print(results)
     print(sum(results))
+
+    end = time.time()
+    print(f"Time taken: {end-start}")
 
 
 if __name__ == "__main__":
