@@ -56,12 +56,20 @@ def check_for_reflection(matrix):
                     temp_reflection[1] += 1
                 else:
                     break
-            reflections.append(temp_reflection)
+
+            if (
+                temp_reflection[0] - (temp_reflection[1] - 1) == 0
+                or temp_reflection[0] + temp_reflection[1] == len(matrix) - 1
+            ):
+                reflections.append(temp_reflection)
+            # reflections.append(temp_reflection)
     return reflections
 
 
 def get_score(reflections):
     # get reflection with the highest score
+    if len(reflections) == 0:
+        return 0
     highest_score = 0
     row_number = 0
     reflection_index = 0
