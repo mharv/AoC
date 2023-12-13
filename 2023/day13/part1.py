@@ -85,7 +85,7 @@ def get_score(reflections):
 
 
 def read_input():
-    # return example
+    return example
     with open("./input.txt") as file:
         return file.read()
 
