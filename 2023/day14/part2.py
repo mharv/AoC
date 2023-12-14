@@ -1,6 +1,8 @@
 # Description: Advent of Code: Day 14, 2023
 # Created by: Mitchell Harvey
 
+import functools
+
 example = """O....#....
 O.OO#....#
 .....##...
@@ -69,7 +71,9 @@ def read_input():
         return file.read()
 
 
+@functools.lru_cache(maxsize=None)
 def perform_cycle(matrix):
+    matrix = tuple(map(tuple, matrix))  # Convert matrix to tuple of tuples
     matrix = apply_lever(rotate_matrix_counterclockwise(matrix))  ## north
     matrix = apply_lever(rotate_matrix_clockwise(matrix))  ## west
     matrix = apply_lever(rotate_matrix_clockwise(matrix))  ## south
@@ -83,7 +87,8 @@ def main():
     matrix = process_input(read_input())
 
     for i in range(1000000000):
-        matrix = perform_cycle(matrix)
+        matrix = perform_cycle(tuple(map(tuple, matrix)))
+        print(i)
 
     total = 0
     for i, row in enumerate(reversed(matrix)):
