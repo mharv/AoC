@@ -25,6 +25,7 @@ def process_input(input):
     return output
 
 
+@functools.lru_cache(maxsize=None)
 def rotate_matrix_clockwise(matrix):
     try:
         return [
@@ -35,6 +36,7 @@ def rotate_matrix_clockwise(matrix):
         return IndexError
 
 
+@functools.lru_cache(maxsize=None)
 def rotate_matrix_counterclockwise(matrix):
     try:
         return [
@@ -45,6 +47,7 @@ def rotate_matrix_counterclockwise(matrix):
         return IndexError
 
 
+@functools.lru_cache(maxsize=None)
 def apply_lever(matrix):
     swaps_made = 0
     for row_index, row in enumerate(matrix):
@@ -74,12 +77,14 @@ def read_input():
 @functools.lru_cache(maxsize=None)
 def perform_cycle(matrix):
     matrix = tuple(map(tuple, matrix))  # Convert matrix to tuple of tuples
-    matrix = apply_lever(rotate_matrix_counterclockwise(matrix))  ## north
-    matrix = apply_lever(rotate_matrix_clockwise(matrix))  ## west
-    matrix = apply_lever(rotate_matrix_clockwise(matrix))  ## south
-    matrix = apply_lever(rotate_matrix_clockwise(matrix))  ## east
+    matrix = apply_lever(
+        tuple(map(tuple, rotate_matrix_counterclockwise(matrix)))
+    )  ## north
+    matrix = apply_lever(tuple(map(tuple, rotate_matrix_clockwise(matrix))))  ## west
+    matrix = apply_lever(tuple(map(tuple, rotate_matrix_clockwise(matrix))))  ## south
+    matrix = apply_lever(tuple(map(tuple, rotate_matrix_clockwise(matrix))))  ## east
     # return to north facing
-    matrix = rotate_matrix_clockwise(rotate_matrix_clockwise(matrix))
+    matrix = rotate_matrix_clockwise(tuple(map(tuple, rotate_matrix_clockwise(matrix))))
     return matrix
 
 
