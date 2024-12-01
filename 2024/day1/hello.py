@@ -24,6 +24,19 @@ def main():
 
     print(sum(diffs))
 
+    hash_table = {}
+
+    for i in first_list:
+        hash_table[i] = 0
+        for j in second_list:
+            if i == j:
+                hash_table[i] += 1
+    diffs = []
+
+    for i in first_list:
+        diffs.append(i * hash_table[i])
+    print(sum(diffs))
+
 
 if __name__ == "__main__":
     main()
