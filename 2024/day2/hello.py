@@ -5,30 +5,39 @@ def load_input(path):
 def check(line):
     line = line.strip().split(" ")
     line = [int(i) for i in line]
-    # print(line)
     flag = None
-    for i, num in enumerate(line):
-        if i == 0:
-            continue
-        if line[i] > line[i - 1]:
-            if flag and flag != "increasing":
-                return False
+    collect = []
+    for exclude in range(len(line)):
+        for i, num in enumerate(line):
+            if i == 0 or i == exclude:
+                continue
+            if line[i] > line[i - 1]:
+                if flag and flag != "increasing":
+                    collect.append(False)
+                    break
+                else:
+                    flag = "increasing"
             else:
-                flag = "increasing"
-        else:
-            if flag and flag != "decreasing":
-                return False
-            else:
-                flag = "decreasing"
+                if flag and flag != "decreasing":
+                    collect.append(False)
+                    break
+                else:
+                    flag = "decreasing"
 
-        if abs(line[i] - line[i - 1]) > 3 or abs(line[i] - line[i - 1]) < 1:
-            return False
-    return True
+            if abs(line[i] - line[i - 1]) > 3 or abs(line[i] - line[i - 1]) < 1:
+                collect.append(False)
+                break
+        if len(collect) == 0:
+            collect.append(True)
+
+    print(f"{collect}")
+
+    return True in collect
 
 
 def main():
-    input_file = load_input("./input.txt")
-    # input_file = load_input("./test_input.txt")
+    # input_file = load_input("./input.txt")
+    input_file = load_input("./test_input.txt")
     puzzle = []
     for line in input_file:
         puzzle.append(line)
