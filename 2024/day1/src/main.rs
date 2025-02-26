@@ -1,21 +1,12 @@
-use std::collections::{HashMap, hash_map};
-use std::fs;
+use aoc_utils::get_input;
+use std::collections::HashMap;
 use std::iter::zip;
-use std::path;
 use std::str::FromStr;
-
-fn get_input() -> String {
-    // let file = "./data/sample_input.txt";
-    let file = "./data/input.txt";
-    let absolute = path::absolute(file).unwrap();
-    println!("{}", absolute.to_str().unwrap());
-    fs::read_to_string(&absolute).unwrap()
-}
 
 fn main() {
     let mut part1_result = 0;
     let mut part2_result = 0;
-    let message = get_input();
+    let message = get_input(false);
     let mut a = vec![];
     let mut b = vec![];
 
