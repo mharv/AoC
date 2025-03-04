@@ -109,6 +109,51 @@ fn find_right_to_left_diag(grid: &Vec<Vec<String>>) -> i32 {
     return count;
 }
 
+fn find_mas(grid: &Vec<Vec<String>>) -> i32 {
+    let mut count = 0;
+    for (y, row) in grid.iter().enumerate() {
+        for (x, c) in row.iter().enumerate() {
+            if grid.len() == y + 2 || row.len() == x + 2 {
+                break;
+            }
+            let temp1 = format!("{}{}{}", grid[y][x], grid[y + 1][x + 1], grid[y + 2][x + 2]);
+            let temp2 = format!("{}{}{}", grid[y + 2][x], grid[y + 1][x + 1], grid[y][x + 2]);
+            if (temp1 == "MAS" || temp1 == "SAM") && (temp2 == "MAS" || temp2 == "SAM") {
+                count += 1;
+                println!("{}, {}", temp1, temp2);
+                println!("~~~");
+                println!(
+                    "{}",
+                    format!("{}{}{}", grid[y][x], grid[y][x + 1], grid[y][x + 2])
+                );
+                println!(
+                    "{}",
+                    format!(
+                        "{}{}{}",
+                        grid[y + 1][x],
+                        grid[y + 1][x + 1],
+                        grid[y + 1][x + 2]
+                    )
+                );
+                println!(
+                    "{}",
+                    format!(
+                        "{}{}{}",
+                        grid[y + 2][x],
+                        grid[y + 2][x + 1],
+                        grid[y + 2][x + 2]
+                    )
+                );
+                println!("---")
+            }
+        }
+        if grid.len() == y + 2 {
+            break;
+        }
+    }
+    return count;
+}
+
 fn main() {
     let input_file = get_input(false);
     let grid = parse_input(input_file);
@@ -118,5 +163,7 @@ fn main() {
     count += find_left_to_right_diag(&grid);
     count += find_right_to_left_diag(&grid);
 
-    println!("Part 1 : {}", count);
+    println!("Part 1: {}", count);
+
+    println!("Part 2: {}", find_mas(&grid));
 }
