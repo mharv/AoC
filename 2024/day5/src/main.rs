@@ -10,15 +10,12 @@ fn do_check(to_check: &Vec<i32>, lookup: &HashMap<i32, Vec<i32>>) -> bool {
         }
 
         let look = &lookup.get(n);
-
         let arr = match look {
             Some(val) => val,
             _ => continue,
         };
 
-        println!("{}: {:?}", n, arr);
         for x in 0..i + 1 {
-            println!("{}:{}", n, &to_check[x]);
             if arr.contains(&to_check[x]) {
                 return false;
             }
@@ -32,7 +29,7 @@ fn get_mid(arr: &Vec<i32>) -> i32 {
 }
 
 fn main() {
-    let ins = get_input(false);
+    let ins = get_input(true);
 
     // parsing
     let mut lookup: HashMap<i32, Vec<i32>> = HashMap::new();
@@ -68,14 +65,17 @@ fn main() {
         bools.push(do_check(&line, &lookup));
     }
 
-    println!("{:?}", bools);
+    let mut fails: Vec<Vec<i32>> = Vec::new();
 
     let mut result = 0;
     for (i, check) in bools.iter().enumerate() {
         if *check {
-            println!("{}", get_mid(&to_check[i]));
             result += get_mid(&to_check[i]);
+        } else {
+            fails.push(to_check[i].clone());
         }
     }
     println!("Part 1 : {}", result);
+
+    println!("{:?}", fails);
 }

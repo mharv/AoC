@@ -2,7 +2,7 @@ use std::fs;
 use std::path;
 
 pub fn get_input(test: bool) -> String {
-    let mut file = "";
+    let file;
     match test {
         true => file = "./data/sample_input.txt",
         false => file = "./data/input.txt",
