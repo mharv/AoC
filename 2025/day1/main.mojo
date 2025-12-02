@@ -36,9 +36,32 @@ def day_1():
     print("Final counter:", counter)
 
 def day_2():
-    pass
+    current_position = 50
+    counter = 0 
+    
+    # var input_lines = get_input("./example-input.txt")
+    var input_lines = get_input("./input.txt")
+    for line in input_lines:
+        direction, distance = process_row(line)
+        
+        while distance > 0:
+            if direction == "L":
+                current_position -= 1
+            elif direction == "R":
+                current_position += 1
+
+
+            if current_position < 0:
+                current_position = 99
+            elif current_position >= 100:
+                current_position = 0
+
+            if current_position == 0:
+                counter += 1
+            distance -= 1   
+    print("Final counter:", counter)
 
 def main():
-    day_1()
-    # day_2()
+    # day_1()
+    day_2()
     
