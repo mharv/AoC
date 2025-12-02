@@ -20,7 +20,7 @@ def repeat_check(s: String) -> Bool:
         return False
     return s[0:length//2] == s[length//2:length]
 
-def day_1():
+def part_1():
     var input_lines = get_input("./input.txt")
     var ranges = get_ranges(input_lines)
     var total = 0
@@ -32,10 +32,10 @@ def day_1():
                 total += i
     print("Total sum of repeating numbers: " + String(total))
 
-def day_2():
+def part_2():
     pass
 
 def main():
-    day_1()
-    # day_2()
+    part_1()
+    # part_2()
     
