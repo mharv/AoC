@@ -6,11 +6,10 @@ def get_input(file_path: String) -> List[String]:
     f.close()
     return inputs^
 
-def get_values(lines: List[String]) -> List[Int]:
+def get_values(line: String) -> List[Int]:
     var values = List[Int]()
-    for line in lines:
-        for val in line:
-            values.append(Int(val))
+    for val in line:
+        values.append(Int(val))
     return values^
 
 # def repeat_check(s: String, divisor: Int) -> Bool:
