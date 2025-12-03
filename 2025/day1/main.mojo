@@ -13,7 +13,7 @@ def process_row(row: String) -> Tuple[String, Int]:
     var result = (String(direction), atol(distance))
     return result
 
-def day_1():
+def part_1():
     current_position = 50
     counter = 0 
     
@@ -35,7 +35,7 @@ def day_1():
             counter += 1
     print("Final counter:", counter)
 
-def day_2():
+def part_2():
     current_position = 50
     counter = 0 
     
@@ -62,6 +62,6 @@ def day_2():
     print("Final counter:", counter)
 
 def main():
-    # day_1()
-    day_2()
+    # part_1()
+    part_2()
     

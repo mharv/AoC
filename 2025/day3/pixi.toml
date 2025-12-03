@@ -1,0 +1,10 @@
+[workspace]
+authors = ["mharv <mitchell.harvey@arup.com>"]
+channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+name = "day3"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
